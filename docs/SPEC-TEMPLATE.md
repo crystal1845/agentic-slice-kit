@@ -89,23 +89,49 @@ actually does and no more.*
 
 ## 4. A complete walkthrough
 
-> **Required** — one of the ten sections we read on 15 September.
+A claim from pre-written deck, run through the agent by hand.
 
-*Write one whole run by hand, before you write any code. Show the actual records
-at each step with real values — real names, real numbers, not "example input".*
+Input: claim presented (difficulty: easy)  
+> **This house believes that dictatorship is a better form of government than democracy for countries with large population**
 
-*One rule makes this work: write the rules first, then make the example follow
-them. If your running system later does something different from this
-walkthrough, one of the two is wrong. Decide which, out loud, before you change
-any code.*
-
-*Why it helps: it becomes three things at once — your test, your demo script, and
-the target your prompts have to hit. Contradictions show up on paper in minutes
-instead of at hour six.*
-
+Step 1 — draft. The agent states the claim and starts the 60-second clock.
 ```
-Step 1 — 
-Step 2 — 
+{"
+  "kind": "claim", "id"="c0c1", "difficulty"="easy", 
+  "text"="This house believes that dictatorship is a better form of government than democracy for countries with large population"
+}
+```
+
+Step 2 — rebuttal (attempt 1). The student types the rebuttal within the time limit
+> **"Dictatorship doesn't take into account the personal feelings of the people. The future of the nation is dependant on one person instead of the people who reside in it."**
+
+Step 3 - Judgement. The critique step scores the rebuttal against the rubric. 
+```
+{"
+  "kind": "judgment", "claim_id":"c0j5", "attemp"=1, 
+  "scores": {"claim_clarity": "pass", "evidence": "fail", "rebuttal_anticipation":"fail"}, 
+  "result"="RETRY", 
+  "instruction":"You haven't engaged with 'larg population' - this argument workd word-for-word against a dictatorship over ten people too. Name what specifically goes wrong when one person governs millions, and back it with one real example."
+}
+```
+
+Step 4 - Rebuttal (attempt 2) Using instruction:
+> **"A large population makes one person's mistakes worse, not better. More people bear the cost of a bad call, with no democratic body to override it. In North Korea's famine of the 1990's, centrally planned agricultural policy under one leader contributed to a death toll estimates in the hundreds of thousands to low millions, with no elected check able to force a course correction. A dictator can act fast, but being fast isnt the same as being right. A large population means more people affected when it isnt right."**
+
+Step 5 - Judgment again. The agent checks the new rebuttal against the same rubrics
+```
+{
+  "kind":"judgment", "claim_id":"c0j7", "attemp"=2, 
+  "scores": {"claim_clarity": "pass", "evidence": "pass", "rebuttal_anticipation":"pass"}, 
+  "result"="WIN"
+}
+```
+
+Step 6 - Pause and ask
+```
+{
+  "kind"="question", "asked_of":"student", "state": "waiting", "text":"Ready for the next one?"
+}
 ```
 
 ## 5. Who is doing the thinking
