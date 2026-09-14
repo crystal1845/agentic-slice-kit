@@ -71,10 +71,6 @@ Aspiring young student debaters more often than not are unable to find a way to 
 
 ## 3. What you are building
 
-> **Required** — one of the ten sections we read on 15 September.
-
-*Three sentences at most.*
-
 **Input: A claim from the predefined deck(from the 20 - 30 short claims) and the student’s rebuttal that is typed within 60 seconds**
 
 **Output: Depending on the agents rubric system, the student either passes the rubrics and moves on to the next claim, or the student fails the rebuttal and receives specific feedback identifying where and why the rebuttal fell short of the rubric**
@@ -150,12 +146,10 @@ Selecting Claim ──▶ Waiting for Rebuttal ──▶ Judging
                          │                       │
                          └────  weak ────────────┘
                                                  │
-                                                 └──▶ Waiting for Human ──▶ Selecting Claim
+                                                 └──▶ Waiting for Student ──▶ Selecting Claim
                                                               │
                                                               └──▶ Finished
 ```
-
-*Then say what kind each state is.*
 
 | state | active / waiting / finished | what moves it on |
 |---|---|---|
@@ -249,18 +243,16 @@ replied" is a different result from one that quietly carried on.*
 
 ## 9. The second encounter
 
-> **Required** — one of the ten sections we read on 15 September.
+The student comes back for a second session. The run doesn't reshuffle the deck and start again, but instead reads the student's stored history (including every claim faced, every win/loss and on which rubric criterion each loss happened) and moves on from there.
 
-*What can your system do the second time that a fresh conversation could not?
-Something comes back — new information, a changed situation, the same person
-returning — and the system remembers what it concluded before and reports what
-changed.*
+For example, take a look at claim c007 ("This house believes that dictatorship is a better form of government than democracy for countries with large population."). Suppose in session 1 the student lost it -> attempt 2 passed claim_clarity and evidence but still failed rebuttal_anticipation. Imagine the student returns days later and faces the same claim again. Because the status of each criterion (pass/fail) was stored, the agent doesn't re-explain the motion from scratch but rather specifically reports what has changed. Like:
 
-*If your design has no second encounter, write that here.*
+> **Claim clarity: still strong
+Evidence: still strong
+Rebuttal anticipation: now established - you pre-empted the "decisive government" counter this time**
 
-*Why it helps: this is the section that tells you whether your stored state is
-doing real work. If nothing ever reads it back, you can drop the storage and save
-yourself half a day.*
+A brand-new session with no memory of the student's previous attempt data couldn't produce that sentence. Best thing it could say would be "pass" or "fail", not "this is the exact thing you fixed that made you fail last time.". That per-criterion history tied to the specific claim is what the SQLite layer exists to store.
+
 
 ## 10. Files and responsibilities
 
@@ -302,9 +294,13 @@ something to show rather than nothing.*
 
 | phase | what lands | hours |
 |---|---|---|
-| 1 | | |
-| | *cut line: what you can still show if you stop here* | |
-| 2 | | |
+| 1 |Wiring up the claim - rebuttal - critique - retry/advance loop using hard-coded fake verdicts, also adding the 2 attempt limit and the waiting state before the next claim |5 |
+| | cut line: we can demonstrate the back edge working by showing that a failed rebuttal is sent back for 1 retry while a passed rebuttal advances to the waiting state | |
+| 2 |real model calls for rebuttal technique, implement the rubric based verdict, specific failure, and store the attempt history and point score. |6 |
+| | cut line: a real claim and rebuttal produce produce a real rubric verdict and specific feedback, with the retry loop working end to end. | |
+| 3 |Add the predefined claim deck and difficulty levels. Use the student’s accumulated score to select an appropriate difficulty for the next claim. Add persistent storage so progress and performance survive between session. |5 |
+| | cut line: the agent remembers the student’s previous performance and can resume with an appropriate next claim. | |
+| 4 |tidy the command-line interface so the timer, claim, rebuttal, rubric feedback, score, retry, and ready state are clear and readable during the demo. |3 |
 
 *Two things are worth doing early: the whole path working end to end on fake,
 hard-coded answers, and saved model responses you can replay. Both feel like a
@@ -352,11 +348,12 @@ differently now, while it is still cheap.*
 ## 15. What you are least sure about
 
 1. Whether the time provided for the rebuttal is adequate.
+Different people type at different paces which maybe disadvantageous to slow typers.
 
 2. Whether the number of retries provided is enough.
 
-3.Whether the judgment criterias are sufficient
-
+3. Whether the judgment criterias are sufficient
+Debate is a highly nuanced form of speech and cannot be judged based on a few conditions.
 
 ## 16. Claims to verify
 
