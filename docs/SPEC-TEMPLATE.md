@@ -41,30 +41,33 @@ building" in the sample. Everything else shares a title.*
 
 ## 1. The setting
 
-> **Required** — one of the ten sections we read on 15 September.
+Students, especially those in high school and university, regularly need to defend
+their opinions in debates, group discussions, interviews, and other academic
+situations. They may understand a topic but still struggle to respond when
+someone presents an opposing claim, particularly when they have to think and
+respond quickly.
 
-*Write one paragraph. Name a specific kind of person, in a specific situation,
-and say what makes it hard for them. "Students struggle with X" is too general —
-say which students, doing what, and when.*
+Right now a student can practise by preparing arguments alone, debating another
+student or getting feedback from a mentor. A human opponent is not always
+available and practising alone does not tell the student whether their response
+actually addresses the opposing claim.
 
-*Why it helps: every argument about scope on the day gets settled against this
-paragraph. When two of you disagree about whether something is worth building,
-you re-read this and the answer is usually already here.*
+**Who exactly: A high school or university student practising argumentation and
+critical thinking.**
 
-**Who exactly:**
-**What they do today:**
-**Why that is hard:**
+**What they do today: The student prepares an argument or practises responding
+to claims, usually alone or with another student or teacher.**
+
+**Why that is hard: A student can prepare an argument without having anyone
+challenge whether their response actually addresses the opposing claim. Human
+debate partners and coaches are not always available, while self-study does not
+always provide repeated and structured practice in responding under pressure.**
 
 ## 2. The problem this solves
 
-> **Required** — one of the ten sections we read on 15 September.
+Some of our team members went for debate competitions last semester. Over time, they'd noticed the gap between professional debaters and participants who showed interest in the same. Although the participants were passionate and keen on debating, they lacked nuances that separated them from the best of the best. They realised that debating is not a skill that is particularly sought after or taught in any educational institution out there, although it is encouraged.
 
-*One paragraph describing a single thing that went wrong. Give enough detail that
-someone who has lived through it would recognise it — what happened, and what it
-cost.*
-
-*Why it helps: this is what your demo has to fix. If it does not, you find that
-out here rather than on Sunday afternoon.*
+Aspiring young student debaters more often than not are unable to find a way to properly train their debate capabilities in a structured manner. Not everyone is fortunate enough to have access to professional debate training, which could hinder students from reaching their true potential. We solve this problem by providing an accessible way of training the student's mind to come up with sound counter-arguments, detect logical fallacies and think clearly, all under the timed constraints of an actual debate.
 
 ## 3. What you are building
 
@@ -72,20 +75,15 @@ out here rather than on Sunday afternoon.*
 
 *Three sentences at most.*
 
-**Input:**
-**Output:**
-**Never, however much a user wants it:**
+**Input: A claim from the predefined deck(from the 20 - 30 short claims) and the student’s rebuttal that is typed within 60 seconds**
 
-*Why it helps: the "never" line is what stops the scope growing. It is much
-easier to say no on Saturday to something you already wrote down on Monday.*
+**Output: Depending on the agents rubric system, the student either passes the rubrics and moves on to the next claim, or the student fails the rebuttal and receives specific feedback identifying where and why the rebuttal fell short of the rubric**
 
-**Why this is agentic, in your own words:**
+**Never, however much a user wants it: The agent doesnt let a student skip ahead to the next claim by arguing that the claim or the timer is unfair, it also should not take an average partial credit across multiple attempts as every claim should be judged as if it was new against the same rubric**
 
-*What that means here: state that survives the run; tools the agent chooses
-rather than ones you fixed in advance; work split across steps that can fail on
-their own; a person in the loop as a state the run can sit and wait in; and at
-least one step that sends work back to an earlier step. Claim what your build
-actually does and no more.*
+**Why this is agentic, in your own words:
+The critique step scores the rebuttal against the rubric rather than just checking at face value. Our critique step is a back edge, it sends the rebuttal back to an earlier step with the named failure reason and the point score plus the attempt history are state carried across that loop. If a certain criterion has fell short then it sends the rebuttal back with a named reason rather than just vaguely stating that “rebuttal failed try again”. Each run keeps track of the attempt history so that it knows whether this is a fresh rebuttal or a 2nd attempt(retrial).
+After 2 trials on one claim, if the student’s rebuttal still doesnt pass the rubric, then it tells where the user fell short in a summarized way and moves on to the next claim. Before showing the next claim, it pauses and waits for the user to say if they are ready to take on the next claim or no, its a state that the run sits in rather than something that just happens automatically. It also keeps a point score on the student which allows it to decide whether the user is ready to take on tougher or easier claims based on their past performance.**
 
 ## 4. A complete walkthrough
 
@@ -96,7 +94,7 @@ Input: claim presented (difficulty: easy)
 
 Step 1 — draft. The agent states the claim and starts the 60-second clock.
 ```
-{"
+{
   "kind": "claim", "id"="c0c1", "difficulty"="easy", 
   "text"="This house believes that dictatorship is a better form of government than democracy for countries with large population"
 }
@@ -107,7 +105,7 @@ Step 2 — rebuttal (attempt 1). The student types the rebuttal within the time 
 
 Step 3 - Judgement. The critique step scores the rebuttal against the rubric. 
 ```
-{"
+{
   "kind": "judgment", "claim_id":"c0j5", "attemp"=1, 
   "scores": {"claim_clarity": "pass", "evidence": "fail", "rebuttal_anticipation":"fail"}, 
   "result"="RETRY", 
@@ -136,69 +134,39 @@ Step 6 - Pause and ask
 
 ## 5. Who is doing the thinking
 
-> **Required** — one of the ten sections we read on 15 September.
-
-| step | the agent does it | the human does it | what the human loses if the agent does it |
+| step | the agent does it | the student does it | what the student loses if the agent does it |
 |---|---|---|---|
-| | | | |
+| Selecting the claim | yes | no | nothing - this is just bookkeeping, not judgment |
+| Judging the rebuttal | yes | no | nothing - the rubric and judging rules are the same every time |
+| Constructing actual argument | no | yes | this is the entire point of the exercise; if an agent writes the rebuttal FOR the student, then the agent practices, not the student |
+| Deciding whether to continue | no | yes | everything - a student who is tired or has had enough shouldn't be pushed into another round because the agent decided to. |
 
-*Safe to hand to the agent: searching, cross-referencing, formatting, noticing a
-contradiction. Worth thinking about first: framing the problem, naming the
-customer, deciding what is load-bearing, deciding whether to go ahead at all.
-Then say plainly which of these your build actually does — a simplification you
-name costs you nothing.*
-
-**If your agent asks a person something:**
-
-**The question it asks, and who answers it:**
-**What happens if nobody answers, and how the output shows that:**
-
-*"We asked, nobody replied" is a different result from one that quietly carried
-on, and the output should be able to tell you which happened. Section 8 has the
-rest of the detail if you want to go further.*
-
-*Why it helps: if every row says "the agent", there is no human moment to design
-— and the moment a person is asked something is usually where a demo either
-lands or falls flat.*
 
 ## 6. The state machine
 
-> **Required** — one of the ten sections we read on 15 September.
-
-*List your states, then draw the arrows between them.*
-
 ```
-        ──▶          ──▶
-   ▲      │
-   └──────┘
+Selecting Claim ──▶ Waiting for Rebuttal ──▶ Judging
+                         ▲                       │
+                         │                       │
+                         └────  weak ────────────┘
+                                                 │
+                                                 └──▶ Waiting for Human ──▶ Selecting Claim
+                                                              │
+                                                              └──▶ Finished
 ```
 
 *Then say what kind each state is.*
 
 | state | active / waiting / finished | what moves it on |
 |---|---|---|
-| | | |
+| Selecting Claim | active | the agent selects a claim based on difficulty and previous results |
+| Waiting for Rebuttal | waiting | the student submits a rebuttal within 60 seconds |
+| Judging | active | the agent evaluates the rebuttal against the rubric and gives feedback |
+| Waiting for Student | waiting | the student answers "Ready for the next one?" |
+| Finished | finished | nothing |
 
-- **Active** — a step picks it up and moves it forward.
-- **Waiting** — paused on something outside the system, like a person's answer or
-  new evidence. A later run can pick it up where it left off.
-- **Finished** — nothing moves it again, ever.
 
-*"Not yet" is almost always Waiting. A state you call Finished and then need to
-resume is a bug, and you will meet it on day two.*
 
-**What can send work backwards:**
-**What the run decides that the diagram cannot show:**
-**Spend limit — what bounds cost (attempts, tokens, time):**
-**Revision limit — what bounds going backwards ("three revisions and stop"):**
-
-*Keep those two limits separate, with separate counters. The spend limit stops
-the run costing too much. The revision limit stops it arguing with itself
-forever. If they share a counter, one failed call that had to be retried quietly
-eats one of your revisions, and the run stops early for the wrong reason.*
-
-*Why it helps: the arrows are the build. Once they are drawn, most of the code is
-one function per state.*
 
 ## 7. The data model
 
@@ -315,17 +283,15 @@ the checks and the limits without also taking your beliefs about your subject.*
 
 ## 11. What this deliberately does not do
 
-> **Required** — one of the ten sections we read on 15 September.
+1). It does not let the student pick their own topic. Free-form topics would mean the critique step has no rubric to score against and no consistent way to judge "below threshold" as the rubric only works cuz every claim in the deck was written to be judged the same way
 
-*Name at least three things it will not do, and give a reason for each. Include
-anything you considered and decided against — those are your strongest entries.*
+2). It does not accept or produce voice. Speech-to-text adds another failure scope due to misheard words, transcription lag costing time from the 60 seconds, and adds no value into whether an arguments quality. Any errors in this step would cause error in the judgement step.
 
-1.
-2.
-3.
+3). Does not support student-vs-student or any opponent mode. A two-student mode needs a different judge (relative judging, rather than rubric-based), which is a whole entire structure
 
-*Why it helps: reasons turn a list of gaps into a list of decisions, and give you
-something to point at when someone suggests adding one back on Sunday morning.*
+4). Does not show remember/show anything beyond simple win/loss count. No leaderboard or rubric-by-rubric breakdown. The moment a score is associated, students start doing it for the score instead of focusing on writing an evidenced rebuttal
+
+5). Does not give unlimited retries on a claim. Without the 2-try bound, a student could keep patching argument indefinitely and the session would never advance
 
 ## 12. Build order
 
@@ -385,16 +351,12 @@ differently now, while it is still cheap.*
 
 ## 15. What you are least sure about
 
-> **Required** — one of the ten sections we read on 15 September.
+1. Whether the time provided for the rebuttal is adequate.
 
-*Three things. Be honest.*
+2. Whether the number of retries provided is enough.
 
-1.
-2.
-3.
+3.Whether the judgment criterias are sufficient
 
-*Why it helps: these are the three things to test first. A doubt written down on
-Monday becomes a ten-minute test on Saturday morning.*
 
 ## 16. Claims to verify
 
