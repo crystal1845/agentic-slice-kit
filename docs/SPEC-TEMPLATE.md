@@ -297,22 +297,15 @@ something to show rather than nothing.*
 | 1 |Wiring up the claim - rebuttal - critique - retry/advance loop using hard-coded fake verdicts, also adding the 2 attempt limit and the waiting state before the next claim |5 |
 | | cut line: we can demonstrate the back edge working by showing that a failed rebuttal is sent back for 1 retry while a passed rebuttal advances to the waiting state | |
 | 2 |real model calls for rebuttal technique, implement the rubric based verdict, specific failure, and store the attempt history and point score. |6 |
-| | cut line: a real claim and rebuttal produce produce a real rubric verdict and specific feedback, with the retry loop working end to end. | |
+| | cut line: a real claim and rebuttal produce a real rubric verdict and specific feedback, with the retry loop working end to end. | |
 | 3 |Add the predefined claim deck and difficulty levels. Use the student’s accumulated score to select an appropriate difficulty for the next claim. Add persistent storage so progress and performance survive between session. |5 |
 | | cut line: the agent remembers the student’s previous performance and can resume with an appropriate next claim. | |
 | 4 |tidy the command-line interface so the timer, claim, rebuttal, rubric feedback, score, retry, and ready state are clear and readable during the demo. |3 |
 
-*Two things are worth doing early: the whole path working end to end on fake,
-hard-coded answers, and saved model responses you can replay. Both feel like a
-detour and both pay for themselves the same day. Prompts come last, not first.*
+**Where the hours will actually go: We believe that phase 2 will be the most time consuming to implement as it includes rubric definitons, understanding of rubric definitions along with their implementation as well as storage of points or failure and attempt history which helps the agent to identify the most suitable claim to be brought up next based on difficulty.**
 
-**Where the hours will actually go:**
 
-*Usually not on writing code. Usually on judging whether a non-deterministic
-output is good enough, which is the part an AI assistant is slowest at helping
-you with.*
 
-*Why it helps: the cut line is what you fall back to at four o'clock on Sunday.*
 
 ## 13. The demo
 
