@@ -102,10 +102,10 @@ Step 2 — rebuttal (attempt 1). The student types the rebuttal within the time 
 Step 3 - Judgement. The critique step scores the rebuttal against the rubric. 
 ```
 {
-  "kind": "judgment", "claim_id":"c0j5", "attemp"=1, 
+  "kind": "judgment", "claim_id":"c0j5", "attempt"=1, 
   "scores": {"claim_clarity": "pass", "evidence": "fail", "rebuttal_anticipation":"fail"}, 
   "result"="RETRY", 
-  "instruction":"You haven't engaged with 'larg population' - this argument workd word-for-word against a dictatorship over ten people too. Name what specifically goes wrong when one person governs millions, and back it with one real example."
+  "instruction":"You haven't engaged with 'large population' - this argument works word-for-word against a dictatorship over ten people too. Name what specifically goes wrong when one person governs millions, and back it with one real example."
 }
 ```
 
@@ -115,7 +115,7 @@ Step 4 - Rebuttal (attempt 2) Using instruction:
 Step 5 - Judgment again. The agent checks the new rebuttal against the same rubrics
 ```
 {
-  "kind":"judgment", "claim_id":"c0j7", "attemp"=2, 
+  "kind":"judgment", "claim_id":"c0j7", "attempt"=2, 
   "scores": {"claim_clarity": "pass", "evidence": "pass", "rebuttal_anticipation":"pass"}, 
   "result"="WIN"
 }
@@ -245,7 +245,7 @@ replied" is a different result from one that quietly carried on.*
 
 The student comes back for a second session. The run doesn't reshuffle the deck and start again, but instead reads the student's stored history (including every claim faced, every win/loss and on which rubric criterion each loss happened) and moves on from there.
 
-For example, take a look at claim c007 ("This house believes that dictatorship is a better form of government than democracy for countries with large population."). Suppose in session 1 the student lost it -> attempt 2 passed claim_clarity and evidence but still failed rebuttal_anticipation. Imagine the student returns days later and faces the same claim again. Because the status of each criterion (pass/fail) was stored, the agent doesn't re-explain the motion from scratch but rather specifically reports what has changed. Like:
+For example, take a look at claim c0c1 ("This house believes that dictatorship is a better form of government than democracy for countries with large population."). Suppose in session 1 the student lost it -> attempt 2 passed claim_clarity and evidence but still failed rebuttal_anticipation. Imagine the student returns days later and faces the same claim again. Because the status of each criterion (pass/fail) was stored, the agent doesn't re-explain the motion from scratch but rather specifically reports what has changed. Like:
 
 > **Claim clarity: still strong
 Evidence: still strong
@@ -277,7 +277,7 @@ the checks and the limits without also taking your beliefs about your subject.*
 
 1). It does not let the student pick their own topic. Free-form topics would mean the critique step has no rubric to score against and no consistent way to judge "below threshold" as the rubric only works cuz every claim in the deck was written to be judged the same way
 
-2). It does not accept or produce voice. Speech-to-text adds another failure scope due to misheard words, transcription lag costing time from the 60 seconds, and adds no value into whether an arguments quality. Any errors in this step would cause error in the judgement step.
+2). It does not accept or produce voice. Speech-to-text adds another failure scope due to misheard words, transcription lag costing time from the 60 seconds, and adds no value into judging the argument's quality. Any errors in this step would cause error in the judgement step.
 
 3). Does not support student-vs-student or any opponent mode. A two-student mode needs a different judge (relative judging, rather than rubric-based), which is a whole entire structure
 
@@ -287,10 +287,6 @@ the checks and the limits without also taking your beliefs about your subject.*
 
 ## 12. Build order
 
-> **Required** — one of the ten sections we read on 15 September.
-
-*Phases, with a cut line after each, so that running out of time leaves you with
-something to show rather than nothing.*
 
 | phase | what lands | hours |
 |---|---|---|
